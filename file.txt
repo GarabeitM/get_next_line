@@ -1,0 +1,6 @@
+Hey, here is the new file i created to test this 
+First why is this failing with diffrent buffersizes???????????
+Second why is it working with 1?
+Third
+Forth something random
+Fifth last one for now 
