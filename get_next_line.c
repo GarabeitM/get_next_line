@@ -5,58 +5,57 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgarabei <mgarabei@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/28 11:48:16 by mgarabei          #+#    #+#             */
-/*   Updated: 2023/06/28 11:52:02 by mgarabei         ###   ########.fr       */
+/*   Created: 2023/06/30 10:58:18 by mgarabei          #+#    #+#             */
+/*   Updated: 2023/06/30 12:53:47 by mgarabei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	read_line(int fd, char *remainder, char **line)
+char	*read_from_file(int fd)
 {
 	int		bytes_read;
-	char	*temp;
-	char	*newline;
+	char	*buffer;
 
-	newline = ft_strchr(remainder, '\n');
-	while (!newline)
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (NULL);
+	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	if (bytes_read <= 0)
 	{
-		bytes_read = read(fd, remainder, BUFFER_SIZE);
-		if (bytes_read <= 0)
-			return (bytes_read);
-		remainder[bytes_read] = '\0';
-		newline = ft_strchr(remainder, '\n');
-		temp = *line;
-		*line = ft_strjoin(*line, remainder);
-		free(temp);
-		if (!*line)
-			return (-1);
+		free(buffer);
+		return (NULL);
 	}
-	*newline = '\0';
-	newline++;
-	ft_strlcpy(remainder, newline, BUFFER_SIZE);
-	return (1);
+	buffer[bytes_read] = '\0';
+	return (buffer);
 }
 
 char	*get_next_line(int fd)
 {
-	static char		*remainder;
-	char			*line;
-	int				result;
+	static char	*remainder;
+	char		*line;
+	char		*new_line;
+	char		*buffer;
 
-	remainder = malloc(sizeof(char *) * (BUFFER_SIZE + 1));
-	line = NULL;
-	if (fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
 		return (NULL);
-	line = malloc(sizeof(char));
-	if (!line)
-		return (NULL);
-	line[0] = '\0';
-	result = read_line(fd, remainder, &line);
-	if (result == -1 || (result == 0 && line[0] == '\0'))
+	buffer = read_from_file(fd);
+	new_line = ft_strchr(buffer, '\n');
+	if (new_line)
 	{
-		free(line);
-		return (NULL);
+		*new_line = '\0';
+		free(remainder);
+		remainder = ft_strdup(new_line + 1);
 	}
+	else
+	{
+		free(remainder);
+		remainder = NULL;
+	}
+	if (remainder)
+		line = ft_strdup(remainder);
+	else
+		line = ft_strdup(buffer);
+	free(buffer);
 	return (line);
 }

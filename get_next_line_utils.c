@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgarabei <mgarabei@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/28 11:51:05 by mgarabei          #+#    #+#             */
-/*   Updated: 2023/06/28 11:51:52 by mgarabei         ###   ########.fr       */
+/*   Created: 2023/06/26 20:42:08 by mgarabei          #+#    #+#             */
+/*   Updated: 2023/06/28 17:54:15 by mgarabei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,3 +100,57 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *)s + i);
 	return (0);
 }
+
+char	*ft_strdup(const char *s)
+{
+	size_t		i;
+	size_t		len;
+	char		*new_str;
+
+	i = 0;
+	len = ft_strlen(s);
+	new_str = malloc(sizeof(char) * (len + 1));
+	if (!new_str)
+		return (NULL);
+	while (i < len)
+	{
+		new_str[i] = s[i];
+		i++;
+	}
+	new_str[i] = '\0';
+	return (new_str);
+}
+
+static size_t	ft_len(char const *s, unsigned int start, size_t len)
+{
+	size_t	l;
+
+	if (start >= ft_strlen(s))
+		return (0);
+	l = 0;
+	while (s[start + l] && l < len)
+		l++;
+	return (l);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	size_t	i;
+	size_t	l;
+	char	*sub_string;
+
+	l = ft_len(s, start, len);
+	sub_string = malloc((l + 1) * sizeof(char));
+	if (!sub_string)
+		return (NULL);
+	i = 0;
+	while (i < l)
+	{
+		sub_string[i] = s[start + i];
+		i++;
+	}
+	sub_string[i] = '\0';
+	return (sub_string);
+}
+
+
