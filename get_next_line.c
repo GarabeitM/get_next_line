@@ -6,56 +6,75 @@
 /*   By: mgarabei <mgarabei@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:58:18 by mgarabei          #+#    #+#             */
-/*   Updated: 2023/06/30 12:53:47 by mgarabei         ###   ########.fr       */
+/*   Updated: 2023/07/04 11:31:26 by mgarabei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*read_from_file(int fd)
+static char	*read_to_remainder(int fd, char *buffer, char *remainder)
 {
 	int		bytes_read;
-	char	*buffer;
+	char	*tmp;
 
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
-		return (NULL);
-	bytes_read = read(fd, buffer, BUFFER_SIZE);
-	if (bytes_read <= 0)
+	bytes_read = 1;
+	while (bytes_read != '\0')
+	//why is this condition like this?
 	{
-		free(buffer);
-		return (NULL);
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
+			return (0);
+		else if (bytes_read == 0)
+			break ;
+		buffer[bytes_read] = '\0';
+		if (!remainder)
+			remainder = ft_strdup("");
+		tmp = remainder;
+		remainder = ft_strjoin(tmp, buffer);
+		free(tmp);
+		tmp = NULL;
+		if (ft_strchr(buffer, '\n'))
+			break ;
 	}
-	buffer[bytes_read] = '\0';
-	return (buffer);
+	return (remainder);
 }
 
-char	*get_next_line(int fd)
+static char	*get_line(char *line)
 {
-	static char	*remainder;
-	char		*line;
-	char		*new_line;
-	char		*buffer;
+	int		i;
+	char	*remainder;
 
-	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
-		return (NULL);
-	buffer = read_from_file(fd);
-	new_line = ft_strchr(buffer, '\n');
-	if (new_line)
-	{
-		*new_line = '\0';
-		free(remainder);
-		remainder = ft_strdup(new_line + 1);
-	}
-	else
+	i = 0;
+	while (line[i] != '\n' && line[i] != '\0')
+		i++;
+	if (line[i] == '\0' || line[1] == '\0')
+		return (0);
+	remainder = ft_substr(line, i + 1, ft_strlen(line) - i);
+	if (*remainder == '\0')
 	{
 		free(remainder);
 		remainder = NULL;
 	}
-	if (remainder)
-		line = ft_strdup(remainder);
-	else
-		line = ft_strdup(buffer);
+	line[i + 1] = '\0';
+	return (remainder);
+}
+
+char	*get_next_line(int fd)
+{
+	char		*current_line;
+	char		*buffer;
+	static char	*remainder;
+
+	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+		return (0);
+	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buffer)
+		return (0);
+	current_line = read_to_remainder(fd, buffer, remainder);
 	free(buffer);
-	return (line);
+	buffer = NULL;
+	if (!current_line)
+		return (NULL);
+	remainder = get_line(current_line);
+	return (current_line);
 }
