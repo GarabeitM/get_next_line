@@ -6,12 +6,12 @@
 /*   By: mgarabei <mgarabei@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 20:43:09 by mgarabei          #+#    #+#             */
-/*   Updated: 2023/07/04 11:33:05 by mgarabei         ###   ########.fr       */
+/*   Updated: 2023/07/04 13:59:38 by mgarabei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
 /*
+//check line 32
 int	main(void)
 {
 	int		i;
@@ -19,7 +19,7 @@ int	main(void)
 	char	*line;
 
 	i = 1;
-	fd = open("tests/zero.txt", O_RDONLY);
+	fd = open("tests/read_error.txt", O_RDONLY);
 	if (fd == -1)
 	{
 		printf("Failed to open the file\n");
@@ -29,7 +29,6 @@ int	main(void)
 	printf("line %i: %s\n", i, line);
 	free(line);
 	i++;
-	//why this condition?
 	while ((line = get_next_line(fd)) != NULL)
 	{
 		printf("line %i: %s\n", i, line);
@@ -43,7 +42,8 @@ int	main(void)
 	}
 	return (0);
 }
-/*
+
+
 int	main(void)
 {
 	char	*line;
@@ -74,4 +74,3 @@ int	main(void)
 	close(fd3);
 	return (0);
 }*/
-clearerr

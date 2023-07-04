@@ -6,11 +6,12 @@
 /*   By: mgarabei <mgarabei@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:58:18 by mgarabei          #+#    #+#             */
-/*   Updated: 2023/07/04 11:31:26 by mgarabei         ###   ########.fr       */
+/*   Updated: 2023/07/04 14:09:59 by mgarabei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+//check line 22
 
 static char	*read_to_remainder(int fd, char *buffer, char *remainder)
 {
@@ -19,11 +20,15 @@ static char	*read_to_remainder(int fd, char *buffer, char *remainder)
 
 	bytes_read = 1;
 	while (bytes_read != '\0')
-	//why is this condition like this?
 	{
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == -1)
+		{
+			free(remainder);
+			remainder = NULL;
+			free(buffer);
 			return (0);
+		}
 		else if (bytes_read == 0)
 			break ;
 		buffer[bytes_read] = '\0';
@@ -48,7 +53,7 @@ static char	*get_line(char *line)
 	while (line[i] != '\n' && line[i] != '\0')
 		i++;
 	if (line[i] == '\0' || line[1] == '\0')
-		return (0);
+		return (NULL);
 	remainder = ft_substr(line, i + 1, ft_strlen(line) - i);
 	if (*remainder == '\0')
 	{
@@ -74,7 +79,11 @@ char	*get_next_line(int fd)
 	free(buffer);
 	buffer = NULL;
 	if (!current_line)
+	{
+		free(remainder);
+		remainder = NULL;
 		return (NULL);
+	}
 	remainder = get_line(current_line);
 	return (current_line);
 }
