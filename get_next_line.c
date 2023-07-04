@@ -6,7 +6,7 @@
 /*   By: mgarabei <mgarabei@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 10:58:18 by mgarabei          #+#    #+#             */
-/*   Updated: 2023/07/04 14:09:59 by mgarabei         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:19:38 by mgarabei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static char	*read_to_remainder(int fd, char *buffer, char *remainder)
 			free(remainder);
 			remainder = NULL;
 			free(buffer);
+			buffer = NULL;
 			return (0);
 		}
 		else if (bytes_read == 0)

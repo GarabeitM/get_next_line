@@ -6,11 +6,12 @@
 /*   By: mgarabei <mgarabei@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 20:43:09 by mgarabei          #+#    #+#             */
-/*   Updated: 2023/07/04 13:59:38 by mgarabei         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:27:59 by mgarabei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
+#include "get_next_line.h"
+
 //check line 32
 int	main(void)
 {
@@ -19,7 +20,7 @@ int	main(void)
 	char	*line;
 
 	i = 1;
-	fd = open("tests/read_error.txt", O_RDONLY);
+	fd = open("tests/multi.txt", O_RDONLY);
 	if (fd == -1)
 	{
 		printf("Failed to open the file\n");
@@ -43,7 +44,7 @@ int	main(void)
 	return (0);
 }
 
-
+/*
 int	main(void)
 {
 	char	*line;
@@ -51,21 +52,21 @@ int	main(void)
 	int		fd1;
 	int		fd2;
 	int		fd3;
-	
-	fd1 = open("file.txt", O_RDONLY);
-	fd2 = open("tests/test2.txt", O_RDONLY);
-	fd3 = open("tests/test3.txt", O_RDONLY);
+
+	fd1 = open("tests/file.txt", O_RDONLY);
+	fd2 = open("tests/zero.txt", O_RDONLY);
+	fd3 = open("tests/read_error.txt", O_RDONLY);
 	i = 1;
 	while (i < 7)
 	{
 		line = get_next_line(fd1);
-		printf("line [%02d]: %s", i, line);
+		printf("1 line [%d]: %s\n", i, line);
 		free(line);
 		line = get_next_line(fd2);
-		printf("line [%02d]: %s", i, line);
+		printf("2 line [%d]: %s\n", i, line);
 		free(line);
 		line = get_next_line(fd3);
-		printf("line [%02d]: %s", i, line);
+		printf("3 line [%d]: %s\n", i, line);
 		free(line);
 		i++;
 	}
