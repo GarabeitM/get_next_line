@@ -6,13 +6,13 @@
 /*   By: mgarabei <mgarabei@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/26 20:43:09 by mgarabei          #+#    #+#             */
-/*   Updated: 2023/07/07 15:48:47 by mgarabei         ###   ########.fr       */
+/*   Updated: 2023/07/19 16:23:05 by mgarabei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-//check line 32
+//read from a file
 int	main(void)
 {
 	int		i;
@@ -21,17 +21,12 @@ int	main(void)
 
 	i = 1;
 	fd = open("tests/file.txt", O_RDONLY);
-	if (fd == -1)
+	line = ft_strdup("");
+	while (line != NULL)
 	{
-		printf("Failed to open the file\n");
-		return (1);
-	}
-	line = get_next_line(fd);
-	printf("line %i: %s\n", i, line);
-	free(line);
-	i++;
-	while ((line = get_next_line(fd)) != NULL)
-	{
+		line = get_next_line(fd);
+		if (line == NULL)
+			break ;
 		printf("line %i: %s\n", i, line);
 		free(line);
 		i++;
@@ -44,34 +39,25 @@ int	main(void)
 	return (0);
 }
 
-/*
-int	main(void)
+//read from stdin
+int main(void)
 {
-	char	*line;
-	int		i;
-	int		fd1;
-	int		fd2;
-	int		fd3;
+    char *line;
 
-	fd1 = open("tests/file.txt", O_RDONLY);
-	fd2 = open("tests/zero.txt", O_RDONLY);
-	fd3 = open("tests/read_error.txt", O_RDONLY);
-	i = 1;
-	while (i < 7)
-	{
-		line = get_next_line(fd1);
-		printf("1 line [%d]: %s\n", i, line);
-		free(line);
-		line = get_next_line(fd2);
-		printf("2 line [%d]: %s\n", i, line);
-		free(line);
-		line = get_next_line(fd3);
-		printf("3 line [%d]: %s\n", i, line);
-		free(line);
-		i++;
-	}
-	close(fd1);
-	close(fd2);
-	close(fd3);
-	return (0);
-}*/
+    printf("Please enter a line or type \"quit\" to quit:\n");
+    line = get_next_line(0);
+    while (line != NULL)
+    {
+        if (strncmp(line, "quit", 4) == 0)
+        {
+            printf("Bye!\n");
+			break ;
+        }
+		printf("You have entered: %s\n", line);
+		printf("What else?\n");
+        free(line);
+        line = get_next_line(0);
+    }
+	free(line);
+    return (0);
+}

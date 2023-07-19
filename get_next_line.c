@@ -5,18 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mgarabei <mgarabei@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 10:58:18 by mgarabei          #+#    #+#             */
-/*   Updated: 2023/07/07 13:40:16 by mgarabei         ###   ########.fr       */
+/*   Created: 2023/07/06 15:56:11 by mgarabei          #+#    #+#             */
+/*   Updated: 2023/07/19 16:24:16 by mgarabei         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-//int to ssize_t
-//bytes_read > 0 or bytes_read != ?
-//if (*str == '\0') or (*str == 0) or (str == 0)? 
-
-static char	*read_to_remainder(int fd, char *buffer, char *remainder)
+static char	*ft_read_to_remainder(int fd, char *buffer, char *remainder)
 {
 	ssize_t		bytes_read;
 	char		*tmp;
@@ -45,9 +41,9 @@ static char	*read_to_remainder(int fd, char *buffer, char *remainder)
 	return (remainder);
 }
 
-static char	*get_line(char *remainder)
+static char	*ft_get_line(char *remainder)
 {
-	ssize_t		i;
+	size_t		i;
 	char		*printed_line;
 
 	i = 0;
@@ -66,7 +62,7 @@ static char	*get_line(char *remainder)
 
 static char	*ft_clean(char *remainder)
 {
-	ssize_t		i;
+	size_t		i;
 	char		*remaining_str;
 
 	i = 0;
@@ -102,12 +98,12 @@ char	*get_next_line(int fd)
 		buffer = NULL;
 		return (NULL);
 	}
-	remainder = read_to_remainder(fd, buffer, remainder);
+	remainder = ft_read_to_remainder(fd, buffer, remainder);
 	free(buffer);
 	buffer = NULL;
 	if (!remainder)
 		return (NULL);
-	printed_line = get_line(remainder);
+	printed_line = ft_get_line(remainder);
 	remainder = ft_clean(remainder);
 	return (printed_line);
 }
